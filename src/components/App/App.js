@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 
 import Answer from '../Answer/Answer';
+import Form from '../Form/Form';
 import Word from '../Word/Word';
 import WrongGuesses from '../WrongGuesses/WrongGuesses';
 
@@ -16,6 +17,9 @@ export default class App extends React.Component {
     this.state = {
       playing: true,
 
+      letterGuess: '',
+      wordGuess: '',
+
       word: null,
       rightGuesses: [],
       wrongGuesses: [],
@@ -25,13 +29,31 @@ export default class App extends React.Component {
     }
   }
 
+  handleChange(type, value) {
+    type === 'letter'
+      ? this.setState({ letterGuess: value })
+      : this.setState({ wordGuess: value })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    event.target.value = '';
+  }
+
   render() {
+    const { word, letterGuess, wordGuess } = this.state;
+
     return (
       <div className='App'>
-        <Answer word={this.state.word} />
+        <Answer word={word} />
         <div className={'row'}>
           <WrongGuesses list={STORE.wrongGuesses} />
           <Word readout={STORE.rightGuesses} />
+          <Form
+            letterGuess={letterGuess}
+            wordGuess={wordGuess}
+            handleChange={this.handleChange}
+          />
         </div>
       </div>
     );
