@@ -3,8 +3,8 @@ import './Word.css';
 
 export default function Word(props) {
 	return (
-		<header>
-			<h1 className='Readout'>{props.word}</h1>
-		</header>
+		<div className='Word'>
+			<h2 className='Readout'>{props.word}</h2>
+		</div>
 	)
 }

@@ -32,9 +32,12 @@ export default class App extends React.Component {
     }
   }
 
+  // random from sample array but to be rewritten to access random word from Words API
   getNewWord() {
+    const randomIndex = Math.floor(Math.random()*STORE.words.length);
+
     return(
-      STORE.words[0]
+      STORE.words[randomIndex]
     );
   }
 
@@ -82,7 +85,20 @@ export default class App extends React.Component {
     });
   }
 
-  renderCenter(stage, word) {
+  processDisplayWord() {
+    const { word, rightGuesses } = this.state;
+
+    let output = '';
+    for (let i = 0; i < word.length; i++) {
+      if (rightGuesses.includes(word[i])) output += word[i];
+      else output += '_';
+    }
+    return output;
+  }
+
+  renderCenter() {
+    const { stage, word } = this.state
+
     switch (stage) {
       case 'landing':
         return (
@@ -93,7 +109,7 @@ export default class App extends React.Component {
           />
         );
       case 'playing':
-        return (<Word word={word} />);
+        return (<Word word={this.processDisplayWord()} />);
       case 'learning':
         return (<Dictionary word={word} />);
       default:
@@ -102,7 +118,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { stage, word, letterGuess, wordGuess } = this.state;
+    const { word, letterGuess, wordGuess } = this.state;
     console.log(word)
 
     return (
@@ -110,7 +126,9 @@ export default class App extends React.Component {
         <Header word={word} handleHome={this.handleHome}/>
         <div className={'row'}>
           <WrongAnswers list={STORE.wrongGuesses} />
-          {this.renderCenter(stage, word)}
+          <section className='Center'>
+            {this.renderCenter()}
+          </section>
           <Form
             letterGuess={letterGuess}
             wordGuess={wordGuess}
