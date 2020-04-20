@@ -1,12 +1,15 @@
 import React from 'react';
 import './App.css';
 
-import Answer from '../Answer/Answer';
+import Dictionary from '../Dictionary/Dictionary';
+import Header from '../Header/Header';
 import Form from '../Form/Form';
+import Landing from '../Landing/Landing';
 import Word from '../Word/Word';
-import WrongGuesses from '../WrongGuesses/WrongGuesses';
+import WrongAnswers from '../WrongAnswers/WrongAnswers';
 
 const STORE = {
+  words: ['sandwich', 'pizza', 'gymnasium'],
   rightGuesses: ['A', 'B', 'C'],
   wrongGuesses: ['D', 'E', 'F']
 };
@@ -15,12 +18,12 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playing: true,
+      stage: 'landing',
+      word: null,
 
       letterGuess: '',
       wordGuess: '',
 
-      word: null,
       rightGuesses: [],
       wrongGuesses: [],
       mistakes: 0,
@@ -29,30 +32,91 @@ export default class App extends React.Component {
     }
   }
 
+  getNewWord() {
+    return(
+      STORE.words[0]
+    );
+  }
+
   handleChange(type, value) {
     type === 'letter'
       ? this.setState({ letterGuess: value })
       : this.setState({ wordGuess: value })
   }
 
-  handleSubmit(event) {
+  handleLetterSubmit(event) {
     event.preventDefault();
-    event.target.value = '';
+    console.log('letter submit!');
+    // check if letter is in word
+    // update arrays and display word accordingly
+    // check mistake count and win conditions
+    // move to win or loss if over
+  }
+
+  handleWordSubmit(event) {
+    event.preventDefault();
+    console.log('word submit!');
+    // check if guess is same as word
+    // move to win or loss
+  }
+
+  handleHome = () => {
+    this.setState({ stage: 'landing' });
+  }
+
+  handleReturn = () => {
+    this.setState({ stage: 'playing' });
+  }
+
+  handleNewGame = () => {
+    this.setState({
+      stage: 'playing',
+      word: this.getNewWord(),
+
+      letterGuess: '',
+      wordGuess: '',
+
+      rightGuesses: [],
+      wrongGuesses: [],
+      mistakes: 0
+    });
+  }
+
+  renderCenter(stage, word) {
+    switch (stage) {
+      case 'landing':
+        return (
+          <Landing
+            word={word}
+            handleReturn={this.handleReturn}
+            handleNewGame={this.handleNewGame}
+          />
+        );
+      case 'playing':
+        return (<Word word={word} />);
+      case 'learning':
+        return (<Dictionary word={word} />);
+      default:
+        console.error('Something went wrong with the game stage');
+    }
   }
 
   render() {
-    const { word, letterGuess, wordGuess } = this.state;
+    const { stage, word, letterGuess, wordGuess } = this.state;
+    console.log(word)
 
     return (
       <div className='App'>
-        <Answer word={word} />
+        <Header word={word} handleHome={this.handleHome}/>
         <div className={'row'}>
-          <WrongGuesses list={STORE.wrongGuesses} />
-          <Word readout={STORE.rightGuesses} />
+          <WrongAnswers list={STORE.wrongGuesses} />
+          {this.renderCenter(stage, word)}
           <Form
             letterGuess={letterGuess}
             wordGuess={wordGuess}
             handleChange={this.handleChange}
+            handleLetterSubmit={this.handleLetterSubmit}
+            handleWordSubmit={this.handleWordSubmit}
           />
         </div>
       </div>

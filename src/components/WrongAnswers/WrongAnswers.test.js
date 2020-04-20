@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import WrongGuesses from './WrongGuesses';
+import WrongAnswers from './WrongAnswers';
 
 it('renders without crashing', () => {
-	render(<WrongGuesses list={[]}/>)
+	render(<WrongAnswers list={[]}/>)
 })
 
 it('renders array', () => {
 	const testArray = ['A', 'B', 'C', 'D'];
-	render(<WrongGuesses list={testArray} />);
+	render(<WrongAnswers list={testArray} />);
 	expect(screen.getByText('ABCD'))
 })

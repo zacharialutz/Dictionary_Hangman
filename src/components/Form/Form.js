@@ -2,35 +2,41 @@ import React from 'react';
 import './Form.css';
 
 export default function Form(props) {
-	this.handleSubmit(event) {
-		event.preventDefault();
-		const guess = event.target.value;
-	}
-
 	return (
-		<form>
-			<label>
-				Guess letter:
+		<section className='Form bordered'>
+			<h3>Make guesses</h3>
+			<form onSubmit={e => props.handleLetterSubmit(e)}>
+				<label>
+					Guess letter:
+					<input
+						type='text'
+						value={props.letterGuess}
+						onChange={e => props.handleChange('letter', e.target.value)}
+					/>
+				</label>
+				<br />
 				<input
-					type='text'
-					value={props.letterGuess}
-					onChange={e => props.handleChange('letter', e.target.value)}
+					className='btn'
+					type='submit'
+					value='Submit'
 				/>
-			</label>
-			<br />
-			<label>
-				Guess word:
+			</form>
+			<form onSubmit={e => props.handleWordSubmit(e)}>
+				<label>
+					Guess entire word:
+					<input
+						type='text'
+						value={props.wordGuess}
+						onChange={e => props.handleChange('word', e.target.value)}
+					/>
+				</label>
+				<br />
 				<input
-					type='text'
-					value={props.wordGuess}
-					onChange={e => props.handleChange('word', e.target.value)}
+					className='btn'
+					type='submit'
+					value='Submit'
 				/>
-			</label>
-			<input
-				className='btn'
-				type='submit'
-				value='Sumbit'
-			/>
-		</form>
+			</form>
+		</section>
 	)
 }

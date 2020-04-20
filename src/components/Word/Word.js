@@ -4,7 +4,7 @@ import './Word.css';
 export default function Word(props) {
 	return (
 		<header>
-			<h1 className='Readout'>{props.readout}</h1>
+			<h1 className='Readout'>{props.word}</h1>
 		</header>
 	)
 }
