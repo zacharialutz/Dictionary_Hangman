@@ -5,6 +5,7 @@ import Dictionary from '../Dictionary/Dictionary';
 import Header from '../Header/Header';
 import Form from '../Form/Form';
 import Landing from '../Landing/Landing';
+import Outcome from '../Outcome/Outcome';
 import Word from '../Word/Word';
 import WrongAnswers from '../WrongAnswers/WrongAnswers';
 
@@ -18,8 +19,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stage: 'landing',
+      stage: 'landing', // landing, playing, ending, learning
       word: null,
+      win: null,
 
       letterGuess: '',
       wordGuess: '',
@@ -34,14 +36,14 @@ export default class App extends React.Component {
 
   // random from sample array but to be rewritten to access random word from Words API
   getNewWord() {
-    const randomIndex = Math.floor(Math.random()*STORE.words.length);
+    const randomIndex = Math.floor(Math.random() * STORE.words.length);
 
-    return(
+    return (
       STORE.words[randomIndex]
     );
   }
 
-  handleChange(type, value) {
+  handleChange = (type, value) => {
     type === 'letter'
       ? this.setState({ letterGuess: value })
       : this.setState({ wordGuess: value })
@@ -56,11 +58,14 @@ export default class App extends React.Component {
     // move to win or loss if over
   }
 
-  handleWordSubmit(event) {
+  handleWordSubmit = (event) => {
     event.preventDefault();
-    console.log('word submit!');
-    // check if guess is same as word
-    // move to win or loss
+    const { word, wordGuess } = this.state;
+    const win = wordGuess === word;
+    this.setState({
+      win,
+      stage: 'ending'
+    });
   }
 
   handleHome = () => {
@@ -75,6 +80,7 @@ export default class App extends React.Component {
     this.setState({
       stage: 'playing',
       word: this.getNewWord(),
+      win: null,
 
       letterGuess: '',
       wordGuess: '',
@@ -83,6 +89,10 @@ export default class App extends React.Component {
       wrongGuesses: [],
       mistakes: 0
     });
+  }
+
+  handleLearnMore = () => {
+    this.setState({ stage: 'learning' })
   }
 
   processDisplayWord() {
@@ -97,7 +107,7 @@ export default class App extends React.Component {
   }
 
   renderCenter() {
-    const { stage, word } = this.state
+    const { stage, word, wordGuess, win } = this.state
 
     switch (stage) {
       case 'landing':
@@ -109,9 +119,24 @@ export default class App extends React.Component {
           />
         );
       case 'playing':
-        return (<Word word={this.processDisplayWord()} />);
+        return (<Word readout={this.processDisplayWord} />);
+      case 'ending':
+        return (
+          <Outcome
+            win={win}
+            guess={wordGuess}
+            word={word}
+            handleNewGame={this.handleNewGame}
+            handleLearnMore={this.handleLearnMore}
+          />
+        );
       case 'learning':
-        return (<Dictionary word={word} />);
+        return (
+          <Dictionary
+            word={word}
+            handleNewGame={this.handleNewGame}
+          />
+        );
       default:
         console.error('Something went wrong with the game stage');
     }
@@ -119,17 +144,18 @@ export default class App extends React.Component {
 
   render() {
     const { word, letterGuess, wordGuess } = this.state;
-    console.log(word)
+    console.log(this.state)
 
     return (
       <div className='App'>
-        <Header word={word} handleHome={this.handleHome}/>
+        <Header word={word} handleHome={this.handleHome} />
         <div className={'row'}>
           <WrongAnswers list={STORE.wrongGuesses} />
           <section className='Center'>
             {this.renderCenter()}
           </section>
           <Form
+            playing={this.state.stage === 'playing'}
             letterGuess={letterGuess}
             wordGuess={wordGuess}
             handleChange={this.handleChange}

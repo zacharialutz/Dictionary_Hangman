@@ -11,8 +11,20 @@ export default function Landing(props) {
 				ac turpis egestas. Donec scelerisque ipsum eget ipsum ultricies ornare. Phasellus sit amet
 				egestas dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 			</p>
-			{props.word && <button onClick={() => props.handleReturn()}>Return</button>}
-			<button onClick={() => props.handleNewGame()}>New Game</button>
+			{props.word &&
+				<button
+					className='btn'
+					onClick={() => props.handleReturn()}
+				>
+					Return
+				</button>
+			}
+			<button
+				className='btn'
+				onClick={() => props.handleNewGame()}
+			>
+				New Game
+			</button>
 		</div>
 	)
 }

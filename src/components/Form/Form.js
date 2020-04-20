@@ -2,6 +2,8 @@ import React from 'react';
 import './Form.css';
 
 export default function Form(props) {
+	const disable = !props.playing;
+
 	return (
 		<section className='Form bordered'>
 			<h3>Make guesses</h3>
@@ -12,6 +14,7 @@ export default function Form(props) {
 						type='text'
 						value={props.letterGuess}
 						onChange={e => props.handleChange('letter', e.target.value)}
+						disabled={disable}
 					/>
 				</label>
 				<br />
@@ -19,15 +22,17 @@ export default function Form(props) {
 					className='btn'
 					type='submit'
 					value='Submit'
+					disabled={disable}
 				/>
 			</form>
 			<form onSubmit={e => props.handleWordSubmit(e)}>
 				<label>
-					Guess entire word:
+					Guess word:
 					<input
 						type='text'
 						value={props.wordGuess}
 						onChange={e => props.handleChange('word', e.target.value)}
+						disabled={disable}
 					/>
 				</label>
 				<br />
@@ -35,6 +40,7 @@ export default function Form(props) {
 					className='btn'
 					type='submit'
 					value='Submit'
+					disabled={disable}
 				/>
 			</form>
 		</section>
