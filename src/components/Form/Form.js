@@ -32,8 +32,8 @@ export default function Form(props) {
 						type='text'
 						value={props.wordGuess}
 						onChange={e => props.handleChange('word', e.target.value)}
-						pattern='[A-Za-z]'
-						title='Single word, case insensitive'
+						// pattern='[A-Za-z]'
+						// title='Single word, case insensitive'
 					/>
 				</label>
 				<br />

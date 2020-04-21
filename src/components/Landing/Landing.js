@@ -1,6 +1,8 @@
 import React from 'react';
 import './Landing.css';
 
+import Button from '../Button/Button';
+
 export default function Landing(props) {
 	return (
 		<div className='Landing brodered'>
@@ -12,19 +14,15 @@ export default function Landing(props) {
 				egestas dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 			</p>
 			{props.word &&
-				<button
-					className='btn'
-					onClick={() => props.handleReturn()}
-				>
-					Return
-				</button>
+				<Button
+					text='Return'
+					onClick={props.handleReturn}
+				/>
 			}
-			<button
-				className='btn'
-				onClick={() => props.handleNewGame()}
-			>
-				New Game
-			</button>
+			<Button
+				text='New Game'
+				onClick={props.handleNewGame}
+			/>
 		</div>
 	)
 }

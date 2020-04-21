@@ -1,6 +1,8 @@
 import React from 'react';
 import './Outcome.css';
 
+import Button from '../Button/Button';
+
 export default function Outcome(props) {
 	const content = {
 		header: props.win
@@ -16,18 +18,14 @@ export default function Outcome(props) {
 			<h3>{content.header}</h3>
 			<p>{content.body}</p>
 			<h2>{props.word}</h2>
-			<button
-				className='btn'
-				onClick={() => props.handleNewGame()}
-			>
-				New Game
-			</button>
-			<button
-				className='btn'
-				onClick={() => props.handleLearnMore()}
-			>
-				Learn More
-			</button>
+			<Button
+				text='New Game'
+				onClick={props.handleNewGame}
+			/>
+			<Button
+				text='Learn More'
+				onClick={props.handleLearnMore}
+			/>
 		</section>
 	)
 }

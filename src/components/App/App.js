@@ -47,12 +47,20 @@ export default class App extends React.Component {
       : this.setState({ wordGuess: value })
   }
 
-  handleLetterSubmit(event) {
+  handleLetterSubmit = event => {
     event.preventDefault();
-    const letter = this.state.letterGuess;
-    console.log(letter);
-    // check if letter is in word
-    // update arrays and display word accordingly
+    const { word, letterGuess, rightGuesses, wrongGuesses, mistakes } = this.state;
+
+    if (word.includes(letterGuess)) {
+      this.setState({ rightGuesses: [...rightGuesses] })
+    }
+    else {
+      this.setState({
+        wrongGuesses: [...wrongGuesses],
+        mistakes: mistakes + 1
+      })
+    }
+    this.setState({ letterGuess: '' })
     // check mistake count and win conditions
     // move to win or loss if over
   }
@@ -106,7 +114,7 @@ export default class App extends React.Component {
   }
 
   renderCenter() {
-    const { stage, word, win, letterGuess, wordGuess, rightGuesses, wrongGuesses } = this.state
+    const { stage, word, win, letterGuess, wordGuess, wrongGuesses } = this.state
 
     switch (stage) {
       case 'landing':
@@ -120,17 +128,17 @@ export default class App extends React.Component {
       case 'playing':
         return (
           <div className={'row'}>
-          <WrongAnswers list={wrongGuesses} />
-          <Word readout={this.processDisplayWord()} />
-          <Form
-            playing={this.state.stage === 'playing'}
-            letterGuess={letterGuess}
-            wordGuess={wordGuess}
-            handleChange={this.handleChange}
-            handleLetterSubmit={this.handleLetterSubmit}
-            handleWordSubmit={this.handleWordSubmit}
-          />
-        </div>
+            <WrongAnswers list={wrongGuesses} />
+            <Word readout={this.processDisplayWord()} />
+            <Form
+              playing={this.state.stage === 'playing'}
+              letterGuess={letterGuess}
+              wordGuess={wordGuess}
+              handleChange={this.handleChange}
+              handleLetterSubmit={this.handleLetterSubmit}
+              handleWordSubmit={this.handleWordSubmit}
+            />
+          </div>
         )
       case 'ending':
         return (

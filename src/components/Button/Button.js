@@ -5,8 +5,9 @@ export default function Button(props) {
 	return (
 		<button
 			className='btn'
-			value={props.text}
 			onClick={() => props.onClick()}
-		/>
+		>
+			{props.text}
+		</button>
 	)
 }
