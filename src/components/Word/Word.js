@@ -3,8 +3,8 @@ import './Word.css';
 
 export default function Word(props) {
 	return (
-		<div className='Word'>
+		<section className='Word'>
 			<h2 className='Readout'>{props.readout}</h2>
-		</div>
+		</section>
 	)
 }

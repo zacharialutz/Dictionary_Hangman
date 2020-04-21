@@ -3,7 +3,7 @@ import './Dictionary.css';
 
 export default function Dictionary(props) {
 	return (
-		<div className='Dictionary'>
+		<section className='Dictionary bordered'>
 			<h2>{props.word}</h2>
 			<button
 				className='btn'
@@ -11,6 +11,6 @@ export default function Dictionary(props) {
 			>
 				New Game
 			</button>
-		</div>
+		</section>
 	)
 }

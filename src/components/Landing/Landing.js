@@ -3,7 +3,7 @@ import './Landing.css';
 
 export default function Landing(props) {
 	return (
-		<div className='Landing'>
+		<div className='Landing brodered'>
 			<h2>Guess the word one letter at a time!</h2>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ante diam, auctor eget nisi nec,

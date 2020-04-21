@@ -10,9 +10,7 @@ import Word from '../Word/Word';
 import WrongAnswers from '../WrongAnswers/WrongAnswers';
 
 const STORE = {
-  words: ['sandwich', 'pizza', 'gymnasium'],
-  rightGuesses: ['A', 'B', 'C'],
-  wrongGuesses: ['D', 'E', 'F']
+  words: ['sandwich', 'pizza', 'gymnasium']
 };
 
 export default class App extends React.Component {
@@ -51,14 +49,15 @@ export default class App extends React.Component {
 
   handleLetterSubmit(event) {
     event.preventDefault();
-    console.log('letter submit!');
+    const letter = this.state.letterGuess;
+    console.log(letter);
     // check if letter is in word
     // update arrays and display word accordingly
     // check mistake count and win conditions
     // move to win or loss if over
   }
 
-  handleWordSubmit = (event) => {
+  handleWordSubmit = event => {
     event.preventDefault();
     const { word, wordGuess } = this.state;
     const win = wordGuess === word;
@@ -107,7 +106,7 @@ export default class App extends React.Component {
   }
 
   renderCenter() {
-    const { stage, word, wordGuess, win } = this.state
+    const { stage, word, win, letterGuess, wordGuess, rightGuesses, wrongGuesses } = this.state
 
     switch (stage) {
       case 'landing':
@@ -119,7 +118,20 @@ export default class App extends React.Component {
           />
         );
       case 'playing':
-        return (<Word readout={this.processDisplayWord} />);
+        return (
+          <div className={'row'}>
+          <WrongAnswers list={wrongGuesses} />
+          <Word readout={this.processDisplayWord()} />
+          <Form
+            playing={this.state.stage === 'playing'}
+            letterGuess={letterGuess}
+            wordGuess={wordGuess}
+            handleChange={this.handleChange}
+            handleLetterSubmit={this.handleLetterSubmit}
+            handleWordSubmit={this.handleWordSubmit}
+          />
+        </div>
+        )
       case 'ending':
         return (
           <Outcome
@@ -143,26 +155,12 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { word, letterGuess, wordGuess } = this.state;
     console.log(this.state)
 
     return (
       <div className='App'>
-        <Header word={word} handleHome={this.handleHome} />
-        <div className={'row'}>
-          <WrongAnswers list={STORE.wrongGuesses} />
-          <section className='Center'>
-            {this.renderCenter()}
-          </section>
-          <Form
-            playing={this.state.stage === 'playing'}
-            letterGuess={letterGuess}
-            wordGuess={wordGuess}
-            handleChange={this.handleChange}
-            handleLetterSubmit={this.handleLetterSubmit}
-            handleWordSubmit={this.handleWordSubmit}
-          />
-        </div>
+        <Header word={this.state.word} handleHome={this.handleHome} />
+        {this.renderCenter()}
       </div>
     );
   }

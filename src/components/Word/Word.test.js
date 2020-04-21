@@ -9,6 +9,6 @@ it('renders without crashing', () => {
 
 it('renders word prop', () => {
 	const testWord = 's_ndwi__';
-	render(<Word word={testWord} />);
+	render(<Word readout={testWord} />);
 	expect(screen.getByText(testWord));
 })

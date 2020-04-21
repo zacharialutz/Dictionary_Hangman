@@ -12,7 +12,7 @@ export default function Outcome(props) {
 	}
 
 	return (
-		<div className='Outcome'>
+		<section className='Outcome bordered'>
 			<h3>{content.header}</h3>
 			<p>{content.body}</p>
 			<h2>{props.word}</h2>
@@ -28,6 +28,6 @@ export default function Outcome(props) {
 			>
 				Learn More
 			</button>
-		</div>
+		</section>
 	)
 }
