@@ -1,12 +1,16 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 
 import Button from './Button';
 
-it('renders without crashing', () => {
+test.only('renders without crashing', () => {
 	render(<Button />);
 })
 
-it('calls the onClick prop when clicked', () => {
+test('calls the onClick prop when clicked', () => {
+	let clicked = false;
+	const testFx = () => clicked = true;
 	
+	fireEvent.click(render(<Button onClick={testFx} />));
+	expect(clicked);
 })
