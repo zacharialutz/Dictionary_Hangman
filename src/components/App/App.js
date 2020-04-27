@@ -35,44 +35,9 @@ export default class App extends React.Component {
   // random from sample array but to be rewritten to access random word from Words API
   getNewWord() {
     const randomIndex = Math.floor(Math.random() * STORE.words.length);
-
     return (
       STORE.words[randomIndex]
     );
-  }
-
-  handleChange = (type, value) => {
-    type === 'letter'
-      ? this.setState({ letterGuess: value })
-      : this.setState({ wordGuess: value })
-  }
-
-  handleLetterSubmit = event => {
-    event.preventDefault();
-    const { word, letterGuess, rightGuesses, wrongGuesses, mistakes } = this.state;
-
-    if (word.includes(letterGuess)) {
-      this.setState({ rightGuesses: [...rightGuesses] })
-    }
-    else {
-      this.setState({
-        wrongGuesses: [...wrongGuesses],
-        mistakes: mistakes + 1
-      })
-    }
-    this.setState({ letterGuess: '' })
-    // check mistake count and win conditions
-    // move to win or loss if over
-  }
-
-  handleWordSubmit = event => {
-    event.preventDefault();
-    const { word, wordGuess } = this.state;
-    const win = wordGuess === word;
-    this.setState({
-      win,
-      stage: 'ending'
-    });
   }
 
   handleHome = () => {
@@ -95,6 +60,41 @@ export default class App extends React.Component {
       rightGuesses: [],
       wrongGuesses: [],
       mistakes: 0
+    });
+  }
+
+  handleChange = (type, value) => {
+    type === 'letter'
+      ? this.setState({ letterGuess: value })
+      : this.setState({ wordGuess: value })
+  }
+
+  handleLetterSubmit = event => {
+    event.preventDefault();
+    const { word, letterGuess, rightGuesses, wrongGuesses, mistakes } = this.state;
+
+    word.includes(letterGuess)
+      ? this.setState({
+        rightGuesses: [...rightGuesses, letterGuess]
+      })
+      : this.setState({
+        wrongGuesses: [...wrongGuesses, letterGuess],
+        mistakes: mistakes + 1
+      })
+    this.setState({ letterGuess: '' })
+
+    // check mistake count and win conditions
+    // move to win or loss if over
+  }
+
+  handleWordSubmit = event => {
+    event.preventDefault();
+    const { word, wordGuess } = this.state;
+    const win = wordGuess === word;
+    this.setState({
+      win,
+      stage: 'ending',
+      wordGuess: ''
     });
   }
 
