@@ -93,8 +93,7 @@ export default class App extends React.Component {
     const win = wordGuess === word;
     this.setState({
       win,
-      stage: 'ending',
-      wordGuess: ''
+      stage: 'ending'
     });
   }
 
@@ -113,7 +112,7 @@ export default class App extends React.Component {
     return output;
   }
 
-  renderCenter() {
+  renderContent() {
     const { stage, word, win, letterGuess, wordGuess, wrongGuesses } = this.state
 
     switch (stage) {
@@ -168,7 +167,7 @@ export default class App extends React.Component {
     return (
       <div className='App'>
         <Header word={this.state.word} handleHome={this.handleHome} />
-        {this.renderCenter()}
+        {this.renderContent()}
       </div>
     );
   }
