@@ -10,7 +10,7 @@ import Word from '../Word/Word';
 import WrongAnswers from '../WrongAnswers/WrongAnswers';
 
 const STORE = {
-  words: ['sandwich', 'pizza', 'gymnasium']
+  words: ['sandwich', 'pizza', 'gymnasium', 'cat', 'ukelele']
 };
 
 export default class App extends React.Component {
@@ -24,8 +24,9 @@ export default class App extends React.Component {
       letterGuess: '',
       wordGuess: '',
 
-      rightGuesses: [],
-      wrongGuesses: [],
+      rightLetters: [],
+      wrongLetters: [],
+      wrongWords: [],
       mistakes: 0,
 
       error: null
@@ -57,8 +58,9 @@ export default class App extends React.Component {
       letterGuess: '',
       wordGuess: '',
 
-      rightGuesses: [],
-      wrongGuesses: [],
+      rightLetters: [],
+      wrongLetters: [],
+      wrongWords: [],
       mistakes: 0
     });
   }
@@ -69,32 +71,50 @@ export default class App extends React.Component {
       : this.setState({ wordGuess: value })
   }
 
+  checkGameEnd() {
+    if (this.state.mistakes > 6) {
+      this.setState({
+        win: false,
+        stage: 'ending'
+      });
+    }
+    else if (this.state.word === this.processDisplayWord()) {
+      this.setState({
+        win: true,
+        stage: 'ending'
+      })
+    }
+  }
+
   handleLetterSubmit = event => {
     event.preventDefault();
-    const { word, letterGuess, rightGuesses, wrongGuesses, mistakes } = this.state;
+    const { word, letterGuess, rightLetters, wrongLetters, mistakes } = this.state;
 
     word.includes(letterGuess)
       ? this.setState({
-        rightGuesses: [...rightGuesses, letterGuess]
+        rightLetters: [...rightLetters, letterGuess]
       })
       : this.setState({
-        wrongGuesses: [...wrongGuesses, letterGuess],
+        wrongLetters: [...wrongLetters, letterGuess],
         mistakes: mistakes + 1
       })
     this.setState({ letterGuess: '' })
-
-    // check mistake count and win conditions
-    // move to win or loss if over
   }
 
   handleWordSubmit = event => {
     event.preventDefault();
-    const { word, wordGuess } = this.state;
-    const win = wordGuess === word;
-    this.setState({
-      win,
-      stage: 'ending'
-    });
+    const { word, wordGuess, wrongWords, mistakes } = this.state;
+
+    word === wordGuess
+      ? this.setState({
+        win: true,
+        stage: 'ending',
+        wordGuess: ''
+      })
+      : this.setState({
+        wrongWords: [...wrongWords, wordGuess],
+        mistakes: mistakes + 1
+      })
   }
 
   handleLearnMore = () => {
@@ -102,18 +122,26 @@ export default class App extends React.Component {
   }
 
   processDisplayWord() {
-    const { word, rightGuesses } = this.state;
+    const { word, rightLetters } = this.state;
 
     let output = '';
     for (let i = 0; i < word.length; i++) {
-      if (rightGuesses.includes(word[i])) output += word[i];
+      if (rightLetters.includes(word[i])) output += word[i];
       else output += '_';
     }
     return output;
   }
 
   renderContent() {
-    const { stage, word, win, letterGuess, wordGuess, wrongGuesses } = this.state
+    const {
+      stage,
+      word,
+      win,
+      letterGuess,
+      wordGuess,
+      wrongLetters,
+      wrongWords
+    } = this.state
 
     switch (stage) {
       case 'landing':
@@ -127,7 +155,7 @@ export default class App extends React.Component {
       case 'playing':
         return (
           <div className={'row'}>
-            <WrongAnswers list={wrongGuesses} />
+            <WrongAnswers letterList={wrongLetters} wordList={wrongWords} />
             <Word readout={this.processDisplayWord()} />
             <Form
               playing={this.state.stage === 'playing'}
@@ -143,7 +171,6 @@ export default class App extends React.Component {
         return (
           <Outcome
             win={win}
-            guess={wordGuess}
             word={word}
             handleNewGame={this.handleNewGame}
             handleLearnMore={this.handleLearnMore}
@@ -163,6 +190,7 @@ export default class App extends React.Component {
 
   render() {
     console.log(this.state)
+    if (this.state.word) this.checkGameEnd();
 
     return (
       <div className='App'>

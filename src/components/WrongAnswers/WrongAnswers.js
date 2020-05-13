@@ -5,7 +5,9 @@ export default function WrongAnswers(props) {
 	return(
 		<div className={'WrongAnswers bordered'}>
 			<h3>Wrong answers:</h3>
-			{props.list}
+			{props.letterList}
+			<br />
+			{props.wordList}
 		</div>
 	)
 }

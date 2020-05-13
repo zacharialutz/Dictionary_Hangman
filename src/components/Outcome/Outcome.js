@@ -7,10 +7,10 @@ export default function Outcome(props) {
 	const content = {
 		header: props.win
 			? 'Congratulations!'
-			: 'Sorry, that was wrong!',
+			: 'Sorry, you lost the game!',
 		body: props.win
 			? 'You figured out the answer! The word was:'
-			: `You guessed "${props.guess}," but the answer was:`
+			: 'You made too many wrong guesses! The answer was:'
 	}
 
 	return (
