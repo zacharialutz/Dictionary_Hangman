@@ -14,7 +14,7 @@ export default function Outcome(props) {
 	}
 
 	return (
-		<section className='Outcome bordered'>
+		<main className='Outcome bordered'>
 			<h3>{content.header}</h3>
 			<p>{content.body}</p>
 			<h2>{props.word}</h2>
@@ -26,6 +26,6 @@ export default function Outcome(props) {
 				text='Learn More'
 				onClick={props.handleLearnMore}
 			/>
-		</section>
+		</main>
 	)
 }

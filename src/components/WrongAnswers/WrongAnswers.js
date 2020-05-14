@@ -3,11 +3,11 @@ import './WrongAnswers.css';
 
 export default function WrongAnswers(props) {
 	return(
-		<div className={'WrongAnswers bordered'}>
+		<section className={'WrongAnswers bordered'}>
 			<h3>Wrong answers:</h3>
 			{props.letterList}
 			<br />
 			{props.wordList}
-		</div>
+		</section>
 	)
 }

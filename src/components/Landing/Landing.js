@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 
 export default function Landing(props) {
 	return (
-		<div className='Landing brodered'>
+		<main className='Landing brodered'>
 			<h2>Guess the word one letter at a time!</h2>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ante diam, auctor eget nisi nec,
@@ -23,6 +23,6 @@ export default function Landing(props) {
 				text='New Game'
 				onClick={props.handleNewGame}
 			/>
-		</div>
+		</main>
 	)
 }

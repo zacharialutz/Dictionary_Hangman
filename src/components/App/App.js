@@ -71,62 +71,70 @@ export default class App extends React.Component {
       : this.setState({ wordGuess: value })
   }
 
-  checkGameEnd() {
-    if (this.state.mistakes > 6) {
-      this.setState({
-        win: false,
-        stage: 'ending'
-      });
-    }
-    else if (this.state.word === this.processDisplayWord()) {
+  handleLetterSubmit = event => {
+    event.preventDefault();
+    const { word, letterGuess, rightLetters, wrongLetters, mistakes } = this.state;
+    const newRightLetters = [...rightLetters, letterGuess];
+
+    if (this.processDisplayWord(word, newRightLetters) === word) {
       this.setState({
         win: true,
         stage: 'ending'
       })
     }
-  }
-
-  handleLetterSubmit = event => {
-    event.preventDefault();
-    const { word, letterGuess, rightLetters, wrongLetters, mistakes } = this.state;
-
-    word.includes(letterGuess)
-      ? this.setState({
-        rightLetters: [...rightLetters, letterGuess]
+    else if (word.includes(letterGuess)) {
+      this.setState({
+        rightLetters: newRightLetters,
+        letterGuess: ''
       })
-      : this.setState({
-        wrongLetters: [...wrongLetters, letterGuess],
-        mistakes: mistakes + 1
+    }
+    else if (mistakes === 6) {
+      this.setState({
+        win: false,
+        stage: 'ending'
       })
-    this.setState({ letterGuess: '' })
+    }
+    else this.setState({
+      wrongLetters: [...wrongLetters, letterGuess],
+      mistakes: mistakes + 1,
+      letterGuess: ''
+    })
   }
 
   handleWordSubmit = event => {
     event.preventDefault();
     const { word, wordGuess, wrongWords, mistakes } = this.state;
 
-    word === wordGuess
-      ? this.setState({
+    if (word === wordGuess) {
+      this.setState({
         win: true,
         stage: 'ending',
         wordGuess: ''
       })
-      : this.setState({
-        wrongWords: [...wrongWords, wordGuess],
-        mistakes: mistakes + 1
+    }
+    else if (mistakes === 6) {
+      this.setState({
+        win: false,
+        stage: 'ending'
       })
+    }
+    else {
+      this.setState({
+        wrongWords: [...wrongWords, wordGuess],
+        mistakes: mistakes + 1,
+        wordGuess: ''
+      })
+    }
   }
 
   handleLearnMore = () => {
     this.setState({ stage: 'learning' })
   }
 
-  processDisplayWord() {
-    const { word, rightLetters } = this.state;
-
+  processDisplayWord(word, check) {
     let output = '';
     for (let i = 0; i < word.length; i++) {
-      if (rightLetters.includes(word[i])) output += word[i];
+      if (check.includes(word[i])) output += word[i];
       else output += '_';
     }
     return output;
@@ -139,6 +147,7 @@ export default class App extends React.Component {
       win,
       letterGuess,
       wordGuess,
+      rightLetters,
       wrongLetters,
       wrongWords
     } = this.state
@@ -154,9 +163,9 @@ export default class App extends React.Component {
         );
       case 'playing':
         return (
-          <div className={'row'}>
+          <main className={'row'}>
             <WrongAnswers letterList={wrongLetters} wordList={wrongWords} />
-            <Word readout={this.processDisplayWord()} />
+            <Word readout={this.processDisplayWord(word, rightLetters)} />
             <Form
               playing={this.state.stage === 'playing'}
               letterGuess={letterGuess}
@@ -165,7 +174,7 @@ export default class App extends React.Component {
               handleLetterSubmit={this.handleLetterSubmit}
               handleWordSubmit={this.handleWordSubmit}
             />
-          </div>
+          </main>
         )
       case 'ending':
         return (
@@ -190,7 +199,6 @@ export default class App extends React.Component {
 
   render() {
     console.log(this.state)
-    if (this.state.word) this.checkGameEnd();
 
     return (
       <div className='App'>
